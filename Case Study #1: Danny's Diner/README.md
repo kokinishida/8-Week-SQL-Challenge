@@ -58,7 +58,7 @@
 
 **Query #1**
 -- 1. What is the total amount each customer spent at the restaurant?
-
+``` sql
     SELECT 
       sales.customer_id, 
       SUM(menu.price) AS total_sales
@@ -67,7 +67,7 @@
       ON sales.product_id = menu.product_id
     GROUP BY sales.customer_id
     ORDER BY sales.customer_id ASC;
-
+```
 | customer_id | total_sales |
 | ----------- | ----------- |
 | A           | 76          |
@@ -77,13 +77,13 @@
 ---
 **Query #2**
 -- 2. How many days has each customer visited the restaurant?
-
+``` sql
     SELECT 
       customer_id, 
       COUNT(DISTINCT order_date) AS visit_count
     FROM dannys_diner.sales
     GROUP BY customer_id;
-
+```
 | customer_id | visit_count |
 | ----------- | ----------- |
 | A           | 4           |
@@ -93,7 +93,7 @@
 ---
 **Query #3**
 -- 3. What was the first item from the menu purchased by each customer?
-
+``` sql
     WITH ordered_sales AS (
       SELECT 
         sales.customer_id, 
@@ -113,7 +113,7 @@
     FROM ordered_sales
     WHERE rank = 1
     GROUP BY customer_id, product_name;
-
+```
 | customer_id | product_name |
 | ----------- | ------------ |
 | A           | curry        |
@@ -124,7 +124,7 @@
 ---
 **Query #4**
 -- 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
-
+``` sql
     SELECT 
       menu.product_name,
       COUNT(sales.product_id) AS most_purchased_item
@@ -134,7 +134,7 @@
     GROUP BY menu.product_name
     ORDER BY most_purchased_item DESC
     LIMIT 1;
-
+```
 | product_name | most_purchased_item |
 | ------------ | ------------------- |
 | ramen        | 8                   |
@@ -142,7 +142,7 @@
 ---
 **Query #5**
 -- 5. Which item was the most popular for each customer?
-
+``` sql
     WITH most_popular AS (
       SELECT 
         sales.customer_id, 
@@ -163,7 +163,7 @@
       order_count
     FROM most_popular 
     WHERE rank = 1;
-
+```
 | customer_id | product_name | order_count |
 | ----------- | ------------ | ----------- |
 | A           | ramen        | 3           |
@@ -175,7 +175,7 @@
 ---
 **Query #6**
 -- 6. Which item was purchased first by the customer after they became a member?
-
+``` sql
     WITH joined_as_member AS (
       SELECT
         members.customer_id, 
@@ -202,11 +202,11 @@
 | ----------- | ------------ |
 | A           | ramen        |
 | B           | sushi        |
-
+```
 ---
 **Query #7**
 -- 7. Which item was purchased just before the customer became a member?
-
+``` sql
     WITH purchased_prior_member AS (
       SELECT 
         members.customer_id, 
@@ -228,7 +228,7 @@
       ON p_member.product_id = menu.product_id
     WHERE rank = 1
     ORDER BY p_member.customer_id ASC;
-
+```
 | customer_id | product_name |
 | ----------- | ------------ |
 | A           | sushi        |
@@ -237,7 +237,7 @@
 ---
 **Query #8**
 -- 8. What is the total items and amount spent for each member before they became a member?
-
+``` sql
     SELECT 
       sales.customer_id, 
       COUNT(sales.product_id) AS total_items, 
@@ -250,7 +250,7 @@
       ON sales.product_id = menu.product_id
     GROUP BY sales.customer_id
     ORDER BY sales.customer_id;
-
+```
 | customer_id | total_items | total_sales |
 | ----------- | ----------- | ----------- |
 | A           | 2           | 25          |
@@ -259,7 +259,7 @@
 ---
 **Query #9**
 -- 9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
-
+``` sql
     WITH points_cte AS (
       SELECT 
         menu.product_id, 
@@ -277,7 +277,7 @@
       ON sales.product_id = points_cte.product_id
     GROUP BY sales.customer_id
     ORDER BY sales.customer_id;
-
+```
 | customer_id | total_points |
 | ----------- | ------------ |
 | A           | 860          |
@@ -287,7 +287,7 @@
 ---
 **Query #10**
 -- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
-
+``` sql
     WITH dates_cte AS (
       SELECT 
         customer_id, 
@@ -311,7 +311,7 @@
       JOIN dannys_diner.menu
       ON sales.product_id = menu.product_id
     GROUP BY sales.customer_id;
-
+```
 | customer_id | points |
 | ----------- | ------ |
 | A           | 1370   |
@@ -321,7 +321,7 @@
 **Query #11**
 -- Bonus Questions
 -- Join all the things
-
+``` sql
     SELECT 
       sales.customer_id, 
       sales.order_date,  
@@ -337,7 +337,7 @@
     INNER JOIN dannys_diner.menu
       ON sales.product_id = menu.product_id
     ORDER BY members.customer_id, sales.order_date;
-
+```
 | customer_id | order_date               | product_name | price | member_status |
 | ----------- | ------------------------ | ------------ | ----- | ------------- |
 | A           | 2021-01-01T00:00:00.000Z | sushi        | 10    | N             |
@@ -359,7 +359,7 @@
 ---
 **Query #12**
 -- Rank all the things
-
+``` sql
     WITH customers_data AS (
       SELECT 
         sales.customer_id, 
@@ -386,7 +386,7 @@
           ORDER BY order_date
       ) END AS ranking
     FROM customers_data;
-
+```
 | customer_id | order_date               | product_name | price | member_status | ranking |
 | ----------- | ------------------------ | ------------ | ----- | ------------- | ------- |
 | A           | 2021-01-01T00:00:00.000Z | sushi        | 10    | N             |         |

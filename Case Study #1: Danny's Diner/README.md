@@ -1,5 +1,5 @@
 **Schema (PostgreSQL v13)**
-
+``` sql 
     CREATE SCHEMA dannys_diner;
     SET search_path = dannys_diner;
     
@@ -53,7 +53,7 @@
     VALUES
       ('A', '2021-01-07'),
       ('B', '2021-01-09');
-
+```
 ---
 
 **Query #1**

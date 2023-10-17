@@ -123,19 +123,20 @@
 ``` 
 **Query #1**
 
+```sql
     SELECT COUNT(order_id) as total_orders
     FROM pizza_runner.customer_orders;
-
+```
 | total_orders |
 | ------------ |
 | 14           |
 
 ---
 **Query #2**
-
+```sql
     SELECT COUNT(DISTINCT(order_id)) as unique_orders
     FROM pizza_runner.customer_orders;
-
+```
 | unique_orders |
 | ------------- |
 | 10            |

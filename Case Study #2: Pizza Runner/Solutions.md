@@ -2,7 +2,7 @@
 
 ## A. Pizza Metrics
 **Schema (PostgreSQL v13)**
-
+```sql
     CREATE SCHEMA pizza_runner;
     SET search_path = pizza_runner;
     
@@ -120,7 +120,7 @@
       (12, 'Tomato Sauce');
 
 ---
-
+``` 
 **Query #1**
 
     SELECT COUNT(order_id) as total_orders

@@ -118,7 +118,7 @@
       (10, 'Salami'),
       (11, 'Tomatoes'),
       (12, 'Tomato Sauce');
-
+```
 ---
 
 ## Data Cleaning
@@ -194,7 +194,7 @@ ALTER COLUMN pickup_time TYPE timestamp USING pickup_time::timestamp without tim
 ALTER COLUMN distance TYPE numeric USING distance::numeric,
 ALTER COLUMN duration TYPE integer USING duration::integer;
 ```
-``` 
+
 **Query #1**
 --How many pizzas were ordered?
 ```sql

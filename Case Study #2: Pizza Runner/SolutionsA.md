@@ -199,7 +199,7 @@ ALTER COLUMN duration TYPE integer USING duration::integer;
 --How many pizzas were ordered?
 ```sql
     SELECT COUNT(order_id) as total_orders
-    FROM pizza_runner.customer_orders;
+    FROM pizza_runner.customer_orders_temp;
 ```
 | total_orders |
 | ------------ |
@@ -210,7 +210,7 @@ ALTER COLUMN duration TYPE integer USING duration::integer;
 -- How many unique customer orders were made?
 ```sql
     SELECT COUNT(DISTINCT(order_id)) as unique_orders
-    FROM pizza_runner.customer_orders;
+    FROM pizza_runner.customer_orders_temp;
 ```
 | unique_orders |
 | ------------- |
@@ -222,9 +222,8 @@ ALTER COLUMN duration TYPE integer USING duration::integer;
 ```sql
     SELECT runner_id,
         COUNT(order_id) as num_orders
-    FROM pizza_runner.runner_orders
-    WHERE pickup_time is not null
-        AND pickup_time != 'null'
+    FROM pizza_runner.runner_orders_temp
+    WHERE distance is not null
     GROUP BY runner_id
     ORDER BY runner_id;
 ```
@@ -240,11 +239,10 @@ ALTER COLUMN duration TYPE integer USING duration::integer;
 ```sql
     SELECT p.pizza_name as pizza_type,
         count(c.pizza_id) as quantity
-    FROM pizza_runner.customer_orders c
-        JOIN pizza_runner.runner_orders r ON c.order_id = r.order_id
+    FROM pizza_runner.customer_orders_temp c
+        JOIN pizza_runner.runner_orders_temp r ON c.order_id = r.order_id
         JOIN pizza_runner.pizza_names p ON p.pizza_id = c.pizza_id
-    WHERE pickup_time is not null
-        AND pickup_time != 'null'
+    WHERE distance is not null
     GROUP BY c.pizza_id,
         p.pizza_name;
 ```
@@ -260,7 +258,7 @@ ALTER COLUMN duration TYPE integer USING duration::integer;
     SELECT c.customer_id,
         p.pizza_name,
         count(c.pizza_id) as quantity
-    FROM pizza_runner.customer_orders c
+    FROM pizza_runner.customer_orders_temp c
         JOIN pizza_runner.pizza_names p ON c.pizza_id = p.pizza_id
     GROUP BY c.customer_id,
         p.pizza_name
@@ -284,10 +282,9 @@ ALTER COLUMN duration TYPE integer USING duration::integer;
 ```sql
     WITH num_pizza_perorder as (
         SELECT count(c.order_id) as quantity
-        FROM pizza_runner.customer_orders c
-            LEFT JOIN pizza_runner.runner_orders r ON c.order_id = r.order_id
-        WHERE r.pickup_time is not null
-            AND r.pickup_time != 'null'
+        FROM pizza_runner.customer_orders_temp c
+            LEFT JOIN pizza_runner.runner_orders_temp r ON c.order_id = r.order_id
+        WHERE distance is not null
         GROUP BY c.order_id
     )
     SELECT max(quantity)

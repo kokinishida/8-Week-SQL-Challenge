@@ -56,7 +56,26 @@
       ('B', '2021-01-09');
 ```
 ---
-
+## Data Cleaning
+Change null values into empty strings
+```sql
+DROP TABLE IF EXISTS customer_orders_temp;
+CREATE TABLE customer_orders_temp AS
+  SELECT 
+    order_id, 
+    customer_id, 
+    pizza_id, 
+    CASE
+      WHEN exclusions is null OR exclusions = 'null' THEN ''
+      ELSE exclusions
+    END AS exclusions,
+    CASE
+      WHEN extras is null OR extras = 'null' THEN ''
+      ELSE extras
+    END AS extras,
+    order_time
+FROM pizza_runner.customer_orders;
+```
 **Query #1**
 -- 1. What is the total amount each customer spent at the restaurant?
 ``` sql
